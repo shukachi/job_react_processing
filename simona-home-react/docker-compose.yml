@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:80" # Маппим порт 80 контейнера на порт 3000 хоста
+    depends_on:
+      - backend
+    networks:
+      - simona-net
+
+  backend:
+    build:
+      context: ./backend # Укажите путь к вашему бэкенду
+    # Пример для Node.js:
+    # command: npm start
+    ports:
+      - "8000:8000" # Открываем порт бэкенда для прямого доступа (опционально)
+    environment:
+      # Здесь можно задать переменные окружения для бэкенда
+      DATABASE_URL: postgresql://user:password@db:5432/mydatabase
+    networks:
+      - simona-net
+    # depends_on:
+    #   - db # Если у вас есть база данных
+
+networks:
+  simona-net:
+    driver: bridge
